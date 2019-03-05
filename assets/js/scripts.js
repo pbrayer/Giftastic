@@ -6,7 +6,20 @@ var buttonz = ["charmander", "pikachu", "squirtle", "bulbasaur", "kadabra", "ala
 
 renderButtons();
 
-$("button").on("click", function() {
+$("#submit").on("click", function(){
+    event.preventDefault();
+    var pokemonSubmit = $("#pokemon-input").val().trim();
+    buttonz = []
+    buttonz.push(pokemonSubmit)
+    renderButtons()
+    console.log(buttonz)
+});
+
+$("button").on("click", function(){
+    console.log($(this))
+});
+
+$(".pokemons").on("click", function() {
 
     var pokemon = $(this).attr("data-pokemon");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + pokemon + "&api_key=TC8YxFS0KfF3ipGGfSpcwrcbjFivoZ1s&limit=10";
@@ -34,7 +47,9 @@ $.ajax({
            var rating = results[i].rating;
 
           // Creating a paragraph tag with the result item's rating
-          var p = $("<p>").text("Rating: " + rating);
+          var p = $("<p>").html("<strong>"+ "Rating: "  + rating);
+          p.css("text-align", "center")
+          
 
           // Creating an image tag
           var pokemonImage = $("<img>");
@@ -42,6 +57,9 @@ $.ajax({
           // Giving the image tag an src attribute of a proprty pulled off the
           // result item
           pokemonImage.attr("src", results[i].images.fixed_height.url);
+          pokemonImage.attr("width", "300px")
+          pokemonImage.attr("height","300px")
+          gifDiv.css("float", "left")
 
           // Appending the paragraph and personImage we created to the "gifDiv" div we created
           gifDiv.append(p);
@@ -56,7 +74,7 @@ $.ajax({
 
   function renderButtons() {
    for(var i = 0; i < buttonz.length; i++) {
-    $("#buttons").append("<button data-pokemon=" + buttonz[i] + ">" + buttonz[i] + "</button>")
+    $("#buttons").append("<button data-pokemon=" + buttonz[i] + " class=" +" pokemons"+ ">"+ buttonz[i] + "</button>")
         }
   }
 
