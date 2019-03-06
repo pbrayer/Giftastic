@@ -7,19 +7,18 @@ var buttonz = ["charmander", "pikachu", "squirtle", "bulbasaur", "kadabra", "ala
 renderButtons();
 
 $("#submit").on("click", function(){
-    event.preventDefault();
+    event.preventDefault()
     var pokemonSubmit = $("#pokemon-input").val().trim();
-    buttonz = []
+    if(pokemonSubmit == "") {
+        alert("Please enter at least SOMETHING!")
+   }
+   else{
     buttonz.push(pokemonSubmit)
-    renderButtons()
-    console.log(buttonz)
+    renderButtons();
+   }
 });
 
-$("button").on("click", function(){
-    console.log($(this))
-});
-
-$(".pokemons").on("click", function() {
+function displayPokemon() {
 
     var pokemon = $(this).attr("data-pokemon");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + pokemon + "&api_key=TC8YxFS0KfF3ipGGfSpcwrcbjFivoZ1s&limit=10";
@@ -56,7 +55,12 @@ $.ajax({
 
           // Giving the image tag an src attribute of a proprty pulled off the
           // result item
-          pokemonImage.attr("src", results[i].images.fixed_height.url);
+          
+          pokemonImage.attr("src", results[i].images.fixed_height_still.url);
+          pokemonImage.attr("data-state", "still");
+          pokemonImage.attr("data-still", results[i].images.fixed_height_still.url);
+          pokemonImage.attr("data-animate", results[i].images.fixed_height.url);
+          pokemonImage.attr("class", "pokemonpic");
           pokemonImage.attr("width", "300px")
           pokemonImage.attr("height","300px")
           gifDiv.css("float", "left")
@@ -70,9 +74,26 @@ $.ajax({
            }
       }
         });
+    };
+
+    $(document).on("click", ".pokemons", displayPokemon);
+    $(document).on("click", ".pokemonpic", function(){
+        var state = $(this).attr("data-state");
+        // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+        // Then, set the image's data-state to animate
+        // Else set src to the data-still value
+        if (state === "still") {
+          $(this).attr("src", $(this).attr("data-animate"));
+          $(this).attr("data-state", "animate");
+        } else {
+          $(this).attr("src", $(this).attr("data-still"));
+          $(this).attr("data-state", "still");
+        }
+  
     });
 
   function renderButtons() {
+      $("#buttons").empty()
    for(var i = 0; i < buttonz.length; i++) {
     $("#buttons").append("<button data-pokemon=" + buttonz[i] + " class=" +" pokemons"+ ">"+ buttonz[i] + "</button>")
         }
