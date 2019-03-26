@@ -14,3 +14,5 @@ Message me over Slack!
 
 Who maintains and contributes to the project
 Sam Reimann
+
+https://pbrayer.github.io/Giftastic/
